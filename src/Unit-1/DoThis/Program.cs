@@ -1,24 +1,34 @@
-﻿using System;
 ﻿using Akka.Actor;
 
 namespace WinTail
 {
     #region Program
-    class Program
+
+    internal class Program
     {
         public static ActorSystem MyActorSystem;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             // initialize MyActorSystem
             MyActorSystem = ActorSystem.Create("MyActorSystem");
 
-            // time to make your first actors!
-            var consoleWriterActor = MyActorSystem.ActorOf(Props.Create(() =>
-            new ConsoleWriterActor()));
+            Props consoleWriterProps = Props.Create<ConsoleWriterActor>();
+            IActorRef consoleWriterActor = MyActorSystem.ActorOf(consoleWriterProps,
+                "consoleWriterActor");
 
-            var consoleReaderActor = MyActorSystem.ActorOf(Props.Create(() =>
-            new ConsoleReaderActor(consoleWriterActor)));
+            Props tailCoordinatorProps = Props.Create<TailCoordinatorActor>();
+            IActorRef tailCoordinatorActor = MyActorSystem.ActorOf(tailCoordinatorProps,
+                "tailCoordinatorActor");
+
+            Props validationActorProps = Props.Create(() =>
+                new FileValidatorActor(consoleWriterActor, tailCoordinatorActor));
+            IActorRef validationActor = MyActorSystem.ActorOf(validationActorProps,
+                "validationActor");
+
+            Props consoleReaderProps = Props.Create<ConsoleReaderActor>(validationActor);
+            IActorRef consoleReaderActor = MyActorSystem.ActorOf(consoleReaderProps,
+                "consoleReaderActor");
 
             // tell console reader to begin
             consoleReaderActor.Tell(ConsoleReaderActor.StartCommand);
@@ -27,5 +37,6 @@ namespace WinTail
             MyActorSystem.WhenTerminated.Wait();
         }
     }
-    #endregion
+
+    #endregion Program
 }

@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WinTail
+﻿namespace WinTail
 {
     public class Messages
     {
         #region Neutral/system messages
+
         /// <summary>
         /// Marker class to continue processing.
         /// </summary>
         public class ContinueProcessing { }
-        #endregion
+
+        #endregion Neutral/system messages
 
         #region Sucess messages
+
         /// <summary>
         /// Base class for signalling that user input was valid.
         /// </summary>
@@ -25,11 +22,14 @@ namespace WinTail
             {
                 Reason = reason;
             }
+
             public string Reason { get; private set; }
         }
-        #endregion
+
+        #endregion Sucess messages
 
         #region Error messages
+
         /// <summary>
         /// Base class for signalling that user input was invalid.
         /// </summary>
@@ -39,6 +39,7 @@ namespace WinTail
             {
                 Reason = reason;
             }
+
             public string Reason { get; private set; }
         }
 
@@ -47,7 +48,9 @@ namespace WinTail
         /// </summary>
         public class NullInputError : InputError
         {
-            public NullInputError(string reason) : base(reason) { }
+            public NullInputError(string reason) : base(reason)
+            {
+            }
         }
 
         /// <summary>
@@ -55,8 +58,11 @@ namespace WinTail
         /// </summary>
         public class ValidationError : InputError
         {
-            public ValidationError(string reason) : base(reason) { } 
+            public ValidationError(string reason) : base(reason)
+            {
+            }
         }
-        #endregion
+
+        #endregion Error messages
     }
 }
