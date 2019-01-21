@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Akka.Actor;
+using Akka.Util.Internal;
+using ChartApp.Actors;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using Akka.Actor;
-using Akka.Util.Internal;
-using ChartApp.Actors;
 
 namespace ChartApp
 {
@@ -19,7 +19,6 @@ namespace ChartApp
         }
 
         #region Initialization
-
 
         private void Main_Load(object sender, EventArgs e)
         {
@@ -40,6 +39,13 @@ namespace ChartApp
             Program.ChartActors.Terminate();
         }
 
-        #endregion
+        #endregion Initialization
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var series = ChartDataHelper.RandomSeries("FakeSeries" +
+                                                      _seriesCounter.GetAndIncrement());
+            _chartActor.Tell(new ChartingActor.AddSeries(series));
+        }
     }
 }
