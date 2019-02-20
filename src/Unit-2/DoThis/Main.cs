@@ -20,14 +20,14 @@ namespace ChartApp
 
         #region Initialization
 
-        private void Main_Load(object sender, EventArgs e)
+        public void Main_Load(object sender, EventArgs e)
         {
             _chartActor = Program.ChartActors.ActorOf(Props.Create(() => new ChartingActor(sysChart)), "charting");
             var series = ChartDataHelper.RandomSeries("FakeSeries" + _seriesCounter.GetAndIncrement());
             _chartActor.Tell(new ChartingActor.InitializeChart(new Dictionary<string, Series>()
-            {
-                {series.Name, series}
-            }));
+                {
+                    {series.Name, series}
+                }));
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -41,11 +41,19 @@ namespace ChartApp
 
         #endregion Initialization
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-            var series = ChartDataHelper.RandomSeries("FakeSeries" +
-                                                      _seriesCounter.GetAndIncrement());
-            _chartActor.Tell(new ChartingActor.AddSeries(series));
+
+        }
+
+        private void btnMemory_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDisk_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
